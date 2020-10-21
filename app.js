@@ -4,7 +4,7 @@ require('dotenv').config()
 const db = require('./db.js')
 
 // require bot libraries
-const Telegraf = require('tele graf')
+const Telegraf = require('telegraf')
 const Markup = require('telegraf/markup')
 const Extra = require('telegraf/extra')
 
@@ -26,9 +26,15 @@ bot.help((ctx) => ctx.reply(helpMessage))
 
 
 bot.hears(/new episode (.+)/, (ctx) => {
-  const episodeName = ctx.match[0];
+  const message = ctx.match[0];
   const userId = ctx.from.id;
-  ctx.reply('New Episode')
+  db.query('INSERT INTO users (user_id, message)', [userId, message], (err, res) => {
+    if (err) {
+      console.log(err);
+    }
+    // res.send(res.rows[0])
+    ctx.reply(`You're new message: ${message} has been stored in the DB!`)
+  })
 })
 
 bot.hears('hello', (ctx) => {

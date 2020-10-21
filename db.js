@@ -1,13 +1,13 @@
-const { Client } = require('pg');
-
-const client = new Client({
+const { Pool } = require('pg')
+const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
     database: 'testdb',
     password: 'phpandjs',
     port: 5432,
-});
-
-client.connect();
-
-module.exports = client;
+  })
+module.exports = {
+  query: (text, params, callback) => {
+    return pool.query(text, params, callback)
+  },
+}
